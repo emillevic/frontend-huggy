@@ -1,6 +1,7 @@
 <template>
   <v-container>
     <show-dialog :dialogShow="dialogShow" :contact="selectedItem" @close="closeShowDialog" />
+    <delete-dialog :dialogDelete="dialogDelete" :contact="selectedItem" @close="closeDeleteDialog" />
 
     <h3 class="mb-6">Contatos</h3>
     <v-row class="justify-space-between align-center elevation-5 rounded-lg">
@@ -38,7 +39,7 @@
             <v-icon small class="mr-2" @click="editItem(item)">
               mdi-pencil
             </v-icon>
-            <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+            <v-icon small @click="openDeleteDialog(item.id)"> mdi-delete </v-icon>
           </template>
         </v-data-table>
       </v-col>
@@ -49,12 +50,14 @@
 <script>
 import EmptyTable from "../components/EmptyTable";
 import ShowDialog from "../components/modals/Show";
+import DeleteDialog from "../components/modals/Delete";
 
 export default {
   name: "Contact",
   components: {
     EmptyTable,
     ShowDialog,
+    DeleteDialog,
   },
   data() {
     return {
@@ -68,11 +71,15 @@ export default {
       items: [],
       selectedItem: {},
       dialogShow: false,
+      dialogDelete: false,
     };
   },
   watch: {
     dialogShow(val) {
       val || this.closeShowDialog();
+    },
+    dialogDelete(val) {
+      val || this.closeDeleteDialog();
     },
   },
   mounted() {
@@ -94,12 +101,18 @@ export default {
       this.axios
         .get(`${this.BASE_URL}/contacts/${contact_id}`)
         .then((response) => {
-          console.log(response);
           this.selectedItem = response.data;
         });
     },
     closeShowDialog() {
       this.dialogShow = false;
+      this.selectedItem = {};
+    },
+    openDeleteDialog(contact_id) {
+      this.dialogDelete = true;
+    },
+    closeDeleteDialog() {
+      this.dialogDelete = false;
       this.selectedItem = {};
     },
   },
