@@ -168,12 +168,14 @@ export default {
         this.axios
           .put(`${this.BASE_URL}/contacts/${this.contactId}`, this.item)
           .then((response) => {
+            this.$emit("update", item)
             this.$emit("close");
           });
       } else {
         this.axios
           .post(`${this.BASE_URL}/contacts`, this.item)
           .then((response) => {
+            this.$emit("add", item)
             this.$emit("close");
           });
       }

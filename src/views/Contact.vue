@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <div>
     <show-dialog
       :dialogShow="dialogShow"
       :contact="selectedItem"
@@ -15,51 +15,61 @@
       :contactId="selectedItem.id"
       @close="closeDialog"
     />
-
-    <h3 class="mb-6">Contatos</h3>
-    <v-row class="justify-space-between align-center elevation-5 rounded-lg white">
-      <v-col cols="3">
-        <v-text-field
-          outlined
-          dense
-          label="Buscar Contato"
-          prepend-inner-icon="mdi-magnify"
-        ></v-text-field>
-      </v-col>
-      <v-col cols="3">
-        <v-btn color="primary" @click="openDialog()">Adicionar Contato</v-btn>
-      </v-col>
-      <v-col cols="12" class="text-center">
-        <v-data-table
-          :headers="headers"
-          :items="items"
-          :items-per-page="5"
-          class="elevation-1"
-        >
-          <template slot="no-data">
-            <empty-table />
-          </template>
-          <template v-slot:item.name="{ item }">
-            <div class="p-2 d-flex justify-start align-center">
-              <img width="32" height="32" :src="item.photo_small" alt="" />
-              <span class="ps-3" v-text="item.name"></span>
-            </div>
-          </template>
-          <template v-slot:item.actions="{ item }">
-            <v-icon small class="mr-2" @click="openShowDialog(item.id)">
-              mdi-eye
-            </v-icon>
-            <v-icon small class="mr-2" @click="openDialog(item.id)">
-              mdi-pencil
-            </v-icon>
-            <v-icon small @click="openDeleteDialog(item.id)">
-              mdi-delete
-            </v-icon>
-          </template>
-        </v-data-table>
-      </v-col>
-    </v-row>
-  </v-container>
+    <v-container class="pb-0">
+      <h3 class="mb-6">Contatos</h3>
+    </v-container>
+    <v-container class="elevation-5 white">
+      <v-row class="justify-space-between">
+        <v-col cols="23" lg="3">
+          <v-text-field
+            background-color="#F8F8F8"
+            height="36px"
+            outlined
+            hide-details="auto"
+            dense
+            label="Buscar Contato"
+            prepend-inner-icon="mdi-magnify"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" lg="2" class="mr-6 text-center">
+          <v-btn color="primary" @click="openDialog()">Adicionar Contato</v-btn>
+        </v-col>
+      </v-row>
+      <v-row class="container-table">
+        <v-col cols="12" class="text-center pa-0">
+          <v-data-table
+            hide-default-footer
+            :headers="headers"
+            :items="items"
+            :items-per-page="5"
+            @click:row="handleRowClick"
+          >
+            <template slot="no-data">
+              <div class="empty-table-container d-flex align-center justify-center">
+                <empty-table />
+              </div>
+            </template>
+            <template v-slot:item.name="{ item }">
+              <div class="p-2 d-flex justify-start align-center">
+                <v-avatar width="32" height="32">
+                  <img :src="item.photo_small" alt="" />
+                </v-avatar>
+                <span class="ps-3" v-text="item.name"></span>
+              </div>
+            </template>
+            <template v-slot:item.actions="{ item }">
+              <v-icon small class="mr-2" @click.stop="openDialog(item.id)">
+                mdi-pencil
+              </v-icon>
+              <v-icon small @click.stop="openDeleteDialog(item.id)">
+                mdi-delete
+              </v-icon>
+            </template>
+          </v-data-table>
+        </v-col>
+      </v-row>
+    </v-container>
+  </div>
 </template>
 
 <script>
@@ -82,7 +92,7 @@ export default {
         { text: "Nome", value: "name" },
         { text: "Email", value: "email" },
         { text: "Telefone", value: "phone" },
-        { text: "Actions", value: "actions" },
+        { text: "", value: "actions" },
       ],
       q: false,
       items: [],
@@ -116,6 +126,9 @@ export default {
         console.log(response);
         this.items = response.data;
       });
+    },
+    handleRowClick(row) {
+      this.openShowDialog(row.id);
     },
     openDialog(contact_id = null) {
       this.dialog = true;
@@ -153,3 +166,16 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.container-table, .empty-table-container {
+  min-height: calc(100vh - 200px);
+}
+.container {
+  border-radius: 16px;
+}
+.v-text-field,
+.v-btn {
+  border-radius: 8px;
+}
+</style>

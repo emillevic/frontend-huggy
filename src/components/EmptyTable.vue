@@ -1,10 +1,8 @@
 <template>
-  <v-row>
-    <v-col>
-      <img src="src/assets/img/book.png">
+    <div>
+      <img src="@/assets/img/book.png">
       <p>Ainda não há contatos</p>
-    </v-col>
-  </v-row>
+    </div>
 </template>
 
 <script>
