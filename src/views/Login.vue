@@ -19,7 +19,7 @@ export default {
         console.log(response);
         this.items = response.data.items;
       });
-      this.$router.push("Contact");
+      this.$router.push("/contatos");
     },
   },
 };

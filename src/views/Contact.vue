@@ -1,10 +1,23 @@
 <template>
   <v-container>
-    <show-dialog :dialogShow="dialogShow" :contact="selectedItem" @close="closeShowDialog" />
-    <delete-dialog :dialogDelete="dialogDelete" :contact="selectedItem" @close="closeDeleteDialog" />
+    <show-dialog
+      :dialogShow="dialogShow"
+      :contact="selectedItem"
+      @close="closeShowDialog"
+    />
+    <delete-dialog
+      :dialogDelete="dialogDelete"
+      :contact="selectedItem"
+      @close="closeDeleteDialog"
+    />
+    <form-dialog
+      :dialog="dialog"
+      :contactId="selectedItem.id"
+      @close="closeDialog"
+    />
 
     <h3 class="mb-6">Contatos</h3>
-    <v-row class="justify-space-between align-center elevation-5 rounded-lg">
+    <v-row class="justify-space-between align-center elevation-5 rounded-lg white">
       <v-col cols="3">
         <v-text-field
           outlined
@@ -14,7 +27,7 @@
         ></v-text-field>
       </v-col>
       <v-col cols="3">
-        <v-btn color="primary">Adicionar Contato</v-btn>
+        <v-btn color="primary" @click="openDialog()">Adicionar Contato</v-btn>
       </v-col>
       <v-col cols="12" class="text-center">
         <v-data-table
@@ -36,10 +49,12 @@
             <v-icon small class="mr-2" @click="openShowDialog(item.id)">
               mdi-eye
             </v-icon>
-            <v-icon small class="mr-2" @click="editItem(item)">
+            <v-icon small class="mr-2" @click="openDialog(item.id)">
               mdi-pencil
             </v-icon>
-            <v-icon small @click="openDeleteDialog(item.id)"> mdi-delete </v-icon>
+            <v-icon small @click="openDeleteDialog(item.id)">
+              mdi-delete
+            </v-icon>
           </template>
         </v-data-table>
       </v-col>
@@ -51,6 +66,7 @@
 import EmptyTable from "../components/EmptyTable";
 import ShowDialog from "../components/modals/Show";
 import DeleteDialog from "../components/modals/Delete";
+import FormDialog from "../components/modals/Form";
 
 export default {
   name: "Contact",
@@ -58,6 +74,7 @@ export default {
     EmptyTable,
     ShowDialog,
     DeleteDialog,
+    FormDialog,
   },
   data() {
     return {
@@ -72,9 +89,13 @@ export default {
       selectedItem: {},
       dialogShow: false,
       dialogDelete: false,
+      dialog: false,
     };
   },
   watch: {
+    dialog(val) {
+      val || this.closeDialog();
+    },
     dialogShow(val) {
       val || this.closeShowDialog();
     },
@@ -96,6 +117,16 @@ export default {
         this.items = response.data;
       });
     },
+    openDialog(contact_id = null) {
+      this.dialog = true;
+      if (contact_id) {
+        this.axios
+          .get(`${this.BASE_URL}/contacts/${contact_id}`)
+          .then((response) => {
+            this.selectedItem = response.data;
+          });
+      }
+    },
     openShowDialog(contact_id) {
       this.dialogShow = true;
       this.axios
@@ -104,12 +135,16 @@ export default {
           this.selectedItem = response.data;
         });
     },
+    openDeleteDialog(contact_id) {
+      this.dialogDelete = true;
+    },
     closeShowDialog() {
       this.dialogShow = false;
       this.selectedItem = {};
     },
-    openDeleteDialog(contact_id) {
-      this.dialogDelete = true;
+    closeDialog() {
+      this.dialog = false;
+      this.selectedItem = {};
     },
     closeDeleteDialog() {
       this.dialogDelete = false;
