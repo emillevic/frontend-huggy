@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialogShow" max-width="600px" content-class="show-dialog">
+  <v-dialog v-model="isOpen" max-width="600px" content-class="show-dialog">
     <v-card>
       <v-card-title class="card-title">
         <div>
@@ -68,6 +68,16 @@ export default {
   props: {
     dialogShow: Boolean,
     contact: Object,
+  },
+  computed: {
+    isOpen: {
+      get(){
+        return this.dialogShow
+      },
+      set(val){
+        if(!val) this.$emit("close")
+      }
+    }
   },
   methods: {
     closeShowDialog(){

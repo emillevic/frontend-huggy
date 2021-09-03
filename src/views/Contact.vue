@@ -7,16 +7,19 @@
     />
     <delete-dialog
       :dialogDelete="dialogDelete"
-      :contact="selectedItem"
+      :contactId="selectedItem.id"
       @close="closeDeleteDialog"
+      @delete="deleteContact"
     />
     <form-dialog
       :dialog="dialog"
       :contactId="selectedItem.id"
       @close="closeDialog"
+      @update="updateContact"
+      @add="addContact"
     />
     <v-container class="pb-0">
-      <h3 class="mb-6">Contatos</h3>
+      <h3 class="mb-6 font-weight-medium">Contatos</h3>
     </v-container>
     <v-container class="elevation-5 white">
       <v-row class="justify-space-between">
@@ -27,12 +30,15 @@
             outlined
             hide-details="auto"
             dense
+            v-model="search"
             label="Buscar Contato"
             prepend-inner-icon="mdi-magnify"
           ></v-text-field>
         </v-col>
         <v-col cols="12" lg="2" class="mr-6 text-center">
-          <v-btn color="primary" @click="openDialog()">Adicionar Contato</v-btn>
+          <v-btn color="primary" class="pl-3" @click="openDialog()">
+            <v-icon class="pr-2">mdi-plus</v-icon>
+            Adicionar Contato</v-btn>
         </v-col>
       </v-row>
       <v-row class="container-table">
@@ -41,7 +47,8 @@
             hide-default-footer
             :headers="headers"
             :items="items"
-            :items-per-page="5"
+            :search="search"
+             :header-props="headerProps"
             @click:row="handleRowClick"
           >
             <template slot="no-data">
@@ -88,12 +95,16 @@ export default {
   },
   data() {
     return {
+      search: '',
       headers: [
         { text: "Nome", value: "name" },
         { text: "Email", value: "email" },
         { text: "Telefone", value: "phone" },
-        { text: "", value: "actions" },
+        { text: "", value: "actions", sortable: false },
       ],
+       headerProps: {
+        sortByText: "Ordernar por"
+      },
       q: false,
       items: [],
       selectedItem: {},
@@ -150,6 +161,7 @@ export default {
     },
     openDeleteDialog(contact_id) {
       this.dialogDelete = true;
+      this.selectedItem = { id: contact_id }
     },
     closeShowDialog() {
       this.dialogShow = false;
@@ -163,6 +175,23 @@ export default {
       this.dialogDelete = false;
       this.selectedItem = {};
     },
+    updateContact(item){
+      this.items.forEach((el, index) => {
+        if (el.id === item.id) {
+          this.items.splice(index, 1, item)
+        }
+      })
+    },
+    addContact(item){
+      this.items.push(item)
+    },
+    deleteContact(id) {
+       this.items.forEach((el, index) => {
+        if (el.id === id) {
+          this.items.splice(index, 1)
+        }
+      })
+    }
   },
 };
 </script>
@@ -177,5 +206,9 @@ export default {
 .v-text-field,
 .v-btn {
   border-radius: 8px;
+}
+
+.v-btn{
+  text-transform: unset;
 }
 </style>

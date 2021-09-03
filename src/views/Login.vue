@@ -1,8 +1,8 @@
 <template>
   <v-container>
-    <v-row class="justify-center align-center">
+    <v-row class="justify-center align-center box-login">
       <v-col class="text-center">
-        <h1>Login</h1>
+        <h1 class="mb-5 font-weight-regular">Login</h1>
         <v-btn color="primary" @click="login()">Fazer login com a Huggy</v-btn>
       </v-col>
     </v-row>
@@ -24,3 +24,12 @@ export default {
   },
 };
 </script>
+<style scoped>
+.box-login{
+  min-height: 100vh;
+}
+.v-btn {
+  border-radius: 8px;
+  text-transform: unset;
+}
+</style>

@@ -1,14 +1,15 @@
 <template>
-  <v-dialog v-model="dialog" max-width="610px">
+  <v-dialog v-model="isOpen" max-width="610px">
     <v-card>
-      <v-card-title class="text-h6 mb-3 card-title"
-        v-text="title"></v-card-title
-      >
+      <v-card-title
+        class="text-h6 mb-3 card-title"
+        v-text="title"
+      ></v-card-title>
       <v-card-text class="px-3">
         <v-form ref="form" v-model="valid" lazy-validation>
           <v-container fluid>
             <v-row>
-              <v-col cols="10">
+              <v-col class="pb-0" cols="10">
                 <label for="">Nome</label>
                 <v-text-field
                   background-color="#F8F8F8"
@@ -18,26 +19,29 @@
                   outlined
                   dense
                   required
+                  class="required-input"
+                  :rules="[(v) => !!v || 'Campo obrigatório']"
                   hide-details="auto"
                 ></v-text-field>
               </v-col>
 
-              <v-col cols="10">
+              <v-col class="pb-0" cols="10">
                 <label for="">E-mail</label>
                 <v-text-field
                   background-color="#F8F8F8"
                   height="36px"
                   v-model="item.email"
                   placeholder="E-mail"
-                  :rules="emailRules"
                   outlined
                   dense
                   required
+                  class="required-input"
+                  :rules="[(v) => !!v || 'Campo obrigatório']"
                   hide-details="auto"
                 ></v-text-field>
               </v-col>
 
-              <v-col cols="6">
+              <v-col class="pb-0" cols="6">
                 <label for="">Telefone</label>
                 <v-text-field
                   background-color="#F8F8F8"
@@ -47,25 +51,29 @@
                   outlined
                   dense
                   required
+                  class="required-input"
+                  :rules="[(v) => !!v || 'Campo obrigatório']"
                   hide-details="auto"
                 ></v-text-field>
               </v-col>
-              <v-col cols="1"></v-col>
-              <v-col cols="6">
+              <v-col class="pb-0" cols="1"></v-col>
+              <v-col class="pb-0" cols="6">
                 <label for="">Celular</label>
                 <v-text-field
                   background-color="#F8F8F8"
                   height="36px"
                   placeholder="Celular"
-                  v-model="item.cellphone"
+                  v-model="item.mobile"
                   outlined
                   dense
                   required
+                  class="required-input"
+                  :rules="[(v) => !!v || 'Campo obrigatório']"
                   hide-details="auto"
                 ></v-text-field>
               </v-col>
 
-              <v-col cols="11">
+              <v-col class="pb-0" cols="11">
                 <label for="">Endereço</label>
                 <v-text-field
                   background-color="#F8F8F8"
@@ -74,12 +82,11 @@
                   v-model="item.address"
                   outlined
                   dense
-                  required
                   hide-details="auto"
                 ></v-text-field>
               </v-col>
 
-              <v-col cols="6">
+              <v-col class="pb-0" cols="6">
                 <label for="">Bairro</label>
                 <v-text-field
                   background-color="#F8F8F8"
@@ -88,11 +95,10 @@
                   v-model="item.district"
                   outlined
                   dense
-                  required
                   hide-details="auto"
                 ></v-text-field>
               </v-col>
-              <v-col cols="3">
+              <v-col class="pb-0" cols="3">
                 <label for="">Estado</label>
                 <v-text-field
                   background-color="#F8F8F8"
@@ -101,7 +107,6 @@
                   v-model="item.state"
                   outlined
                   dense
-                  required
                   hide-details="auto"
                 ></v-text-field>
               </v-col>
@@ -133,51 +138,81 @@ export default {
   data() {
     return {
       valid: true,
-      title: 'Adicionar novo contato',
-      emailRules: [
-        (v) => !!v || "E-mail is required",
-        (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
-      ],
+      title: "Adicionar novo contato",
       item: {},
     };
   },
-  watch: {
-    contactId(val) {
-      if(val) {
-        this.getItem()
-        this.title = "Editar contato"
-      } else{
-        this.title = "Adicionar novo contato"
+  computed: {
+    isOpen: {
+      get(){
+        return this.dialog
+      },
+      set(val){
+        if(!val) this.$emit("close")
       }
     }
+  },
+  watch: {
+    contactId(val) {
+      if (val) {
+        this.getItem();
+        this.title = "Editar contato";
+      } else {
+        this.title = "Adicionar novo contato";
+        this.item = {}
+        this.$refs.form.reset()
+      }
+    },
   },
   methods: {
     getItem() {
       this.axios
         .get(`${this.BASE_URL}/contacts/${this.contactId}`)
         .then((response) => {
-          console.log(response)
           this.item = response.data;
         });
     },
     closeDialog() {
+      this.$refs.form.reset()
       this.$emit("close");
     },
     saveDialog() {
-      if (this.contactId) {
-        this.axios
-          .put(`${this.BASE_URL}/contacts/${this.contactId}`, this.item)
-          .then((response) => {
-            this.$emit("update", item)
-            this.$emit("close");
-          });
-      } else {
-        this.axios
-          .post(`${this.BASE_URL}/contacts`, this.item)
-          .then((response) => {
-            this.$emit("add", item)
-            this.$emit("close");
-          });
+      if (this.$refs.form.validate()) {
+        if (this.contactId) {
+          this.axios
+            .put(`${this.BASE_URL}/contacts/${this.contactId}`, this.item)
+            .then((response) => {
+              this.item = response.data  
+              this.Swal.fire(
+                "Sucesso!",
+                "Contato atualizado com sucesso!",
+                "success"
+              );
+              this.$emit("update", this.item);
+              this.item = {};
+              this.$emit("close");
+            })
+            .catch((error) => {
+              this.Swal.fire("Opss...", "Erro ao atualizar contato!", "error");
+            });
+        } else {
+          this.axios
+            .post(`${this.BASE_URL}/contacts`, this.item)
+            .then((response) => {
+              this.item = response.data
+              this.Swal.fire(
+                "Sucesso!",
+                "Contato adicionado com sucesso!",
+                "success"
+              );
+              this.$emit("add", this.item);
+              this.item = {};
+              this.$emit("close");
+            })
+            .catch((error) => {
+              this.Swal.fire("Opss...", "Erro ao adicionar contato!", "error");
+            });
+        }
       }
     },
   },
@@ -215,5 +250,20 @@ label {
   text-transform: capitalize;
   letter-spacing: 1.25px;
   line-height: 18px;
+}
+.required-input >>> .v-input__slot::after,
+.required-input >>> .v-input__slot::before,
+.required-input >>> .error--text {
+  color: #ad2213 !important;
+  font-weight: 500;
+  line-height: 16px;
+  letter-spacing: 0.4px;
+  padding-top: 5px;
+}
+.required-input.error--text >>> .v-input__slot fieldset{
+  border: 1px solid #AD2213 !important;
+}
+.required-input >>> .v-text-field__details{
+  padding-left: 0 !important;
 }
 </style>
