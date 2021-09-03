@@ -2,8 +2,10 @@
   <div>
     <show-dialog
       :dialogShow="dialogShow"
-      :contact="selectedItem"
+      :contact="showItem"
       @close="closeShowDialog"
+      @delete="openDeleteDialog"
+      @update="openDialog"
     />
     <delete-dialog
       :dialogDelete="dialogDelete"
@@ -110,6 +112,7 @@ export default {
       },
       q: false,
       items: [],
+      showItem: {},
       selectedItem: {},
       dialogShow: false,
       dialogDelete: false,
@@ -154,7 +157,7 @@ export default {
       this.axios
         .get(`${this.BASE_URL}/contacts/${contact_id}`)
         .then((response) => {
-          this.selectedItem = response.data;
+          this.showItem = response.data;
         });
     },
     openDeleteDialog(contact_id) {

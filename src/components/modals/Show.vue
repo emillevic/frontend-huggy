@@ -9,9 +9,9 @@
           <b class="text-h6 ms-5" v-text="contact.name"></b>
         </div>
         <div class="card-title-icons">
-          <v-icon size="20" class="mr-7" color="#505050"> mdi-delete </v-icon>
-          <v-icon size="20" class="mr-7" color="#505050"> mdi-pencil </v-icon>
-          <v-icon size="20" @click="closeShowDialog()" class="mr-3" color="#505050"> mdi-close </v-icon>
+          <v-icon size="20" @click="$emit('delete')" class="mr-7" color="#505050"> mdi-delete </v-icon>
+          <v-icon size="20" @click="$emit('update')" class="mr-7" color="#505050"> mdi-pencil </v-icon>
+          <v-icon size="20" @click="$emit('close')" class="mr-3" color="#505050"> mdi-close </v-icon>
         </div>
       </v-card-title>
       <v-card-text>
@@ -79,11 +79,6 @@ export default {
       }
     }
   },
-  methods: {
-    closeShowDialog(){
-      this.$emit('close')
-    }
-  }
 };
 </script>
 
@@ -107,5 +102,10 @@ export default {
 }
 .contact-info {
   color: #262626;
+}
+@media screen and (max-width: 992px) {
+  .card-title{
+    justify-content: center;
+  }
 }
 </style>
