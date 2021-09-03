@@ -33,7 +33,7 @@
             hide-details="auto"
             dense
             v-model="search"
-            label="Buscar Contato"
+            label="Buscar contato"
             prepend-inner-icon="mdi-magnify"
           ></v-text-field>
         </v-col>
@@ -58,7 +58,14 @@
               <div
                 class="empty-table-container d-flex align-center justify-center"
               >
-                <empty-table />
+                <empty-table @open="openDialog"/>
+              </div>
+            </template>
+            <template slot="no-results">
+              <div
+                class="d-flex align-center justify-center"
+              >
+                <p class="pt-5">Nenhum resultado encontrado</p>
               </div>
             </template>
             <template v-slot:item.name="{ item }">
@@ -209,7 +216,15 @@ export default {
 .v-btn {
   border-radius: 8px;
 }
-
+input,
+.v-input__slot,
+.v-text-field--outlined >>> fieldset{
+  border-color: #E1E1E1;
+}
+.v-text-field--outlined >>> fieldset{
+  color: #949494 !important;
+  font-size: 14px;
+}
 .v-btn {
   text-transform: unset;
 }
