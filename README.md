@@ -14,12 +14,14 @@ Inicialmente crie um arquivo .env na raiz do projeto e defina a VUE_APP_BASE_URL
 
 Após isso, crie um arquivo config.json, onde ficarão as configurações propostas pela api utilizada para a header das requisições. Esse arquivo precisa conter tal objeto:
 
+```
 {
     "Access-Control-Allow-Origin": "*",
     "Content-Type": "application/json",
     "Accept": "application/json",
     "Authorization": "Bearer xxx"
 }
+```
 
 É importante frisar que o Token de autorização é a chave gerada ao fazer as configurações necessárias no painel da Huggy e deve ser definida no seu arquivo de configurações, já que o projeto em questão está sendo rodado em ambiente de desenvolvimento.
 ### Após as configurações, compile o projeto para desenvolvimento:
