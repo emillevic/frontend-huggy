@@ -9,8 +9,8 @@
           <b class="text-h6 ms-5" v-text="contact.name"></b>
         </div>
         <div class="card-title-icons">
-          <v-icon size="20" @click="$emit('delete')" class="mr-7" color="#505050"> mdi-delete </v-icon>
-          <v-icon size="20" @click="$emit('update')" class="mr-7" color="#505050"> mdi-pencil </v-icon>
+          <v-icon size="20" @click="$emit('delete')" class="mr-7 delete-btn" color="#505050"> mdi-delete </v-icon>
+          <v-icon size="20" @click="$emit('update')" class="mr-7 update-btn" color="#505050"> mdi-pencil </v-icon>
           <v-icon size="20" @click="$emit('close')" class="mr-3" color="#505050"> mdi-close </v-icon>
         </div>
       </v-card-title>

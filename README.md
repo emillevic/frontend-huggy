@@ -33,3 +33,14 @@ npm run serve
 ```
 npm run build
 ```
+
+### Para execução dos testes, utilize o seguinte comando:
+```
+npm run test:unit
+```
+
+### Testes mapeados e realizados na aplicação:
+
+- Abertura do modal do formulário com a opção de adicionar novo contato
+- Abertura do modal do formulário com a opção de editar contato
+- Submissão formulário com campos obrigatórios não preenchidos
