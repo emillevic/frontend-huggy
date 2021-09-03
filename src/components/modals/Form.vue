@@ -9,7 +9,7 @@
         <v-form ref="form" v-model="valid" lazy-validation>
           <v-container fluid>
             <v-row>
-              <v-col class="pb-0" cols="10">
+              <v-col class="pb-0" lg="10" cols="12">
                 <label for="">Nome</label>
                 <v-text-field
                   background-color="#F8F8F8"
@@ -25,7 +25,7 @@
                 ></v-text-field>
               </v-col>
 
-              <v-col class="pb-0" cols="10">
+              <v-col class="pb-0" lg="10" cols="12">
                 <label for="">E-mail</label>
                 <v-text-field
                   background-color="#F8F8F8"
@@ -41,7 +41,7 @@
                 ></v-text-field>
               </v-col>
 
-              <v-col class="pb-0" cols="6">
+              <v-col class="pb-0" lg="6" cols="12">
                 <label for="">Telefone</label>
                 <v-text-field
                   background-color="#F8F8F8"
@@ -56,8 +56,8 @@
                   hide-details="auto"
                 ></v-text-field>
               </v-col>
-              <v-col class="pb-0" cols="1"></v-col>
-              <v-col class="pb-0" cols="6">
+              <v-col class="pb-0" lg="1" cols="12"></v-col>
+              <v-col class="pb-0" lg="6" cols="12">
                 <label for="">Celular</label>
                 <v-text-field
                   background-color="#F8F8F8"
@@ -73,7 +73,7 @@
                 ></v-text-field>
               </v-col>
 
-              <v-col class="pb-0" cols="11">
+              <v-col class="pb-0" lg="11" cols="12">
                 <label for="">Endereço</label>
                 <v-text-field
                   background-color="#F8F8F8"
@@ -86,7 +86,7 @@
                 ></v-text-field>
               </v-col>
 
-              <v-col class="pb-0" cols="6">
+              <v-col class="pb-0" lg="6" cols="12">
                 <label for="">Bairro</label>
                 <v-text-field
                   background-color="#F8F8F8"
@@ -98,7 +98,7 @@
                   hide-details="auto"
                 ></v-text-field>
               </v-col>
-              <v-col class="pb-0" cols="3">
+              <v-col class="pb-0" lg="3" cols="12">
                 <label for="">Estado</label>
                 <v-text-field
                   background-color="#F8F8F8"

@@ -38,7 +38,8 @@
         <v-col cols="12" lg="2" class="mr-6 text-center">
           <v-btn color="primary" class="pl-3" @click="openDialog()">
             <v-icon class="pr-2">mdi-plus</v-icon>
-            Adicionar Contato</v-btn>
+            Adicionar Contato</v-btn
+          >
         </v-col>
       </v-row>
       <v-row class="container-table">
@@ -48,11 +49,13 @@
             :headers="headers"
             :items="items"
             :search="search"
-             :header-props="headerProps"
+            :header-props="headerProps"
             @click:row="handleRowClick"
           >
             <template slot="no-data">
-              <div class="empty-table-container d-flex align-center justify-center">
+              <div
+                class="empty-table-container d-flex align-center justify-center"
+              >
                 <empty-table />
               </div>
             </template>
@@ -95,15 +98,15 @@ export default {
   },
   data() {
     return {
-      search: '',
+      search: "",
       headers: [
         { text: "Nome", value: "name" },
         { text: "Email", value: "email" },
         { text: "Telefone", value: "phone" },
         { text: "", value: "actions", sortable: false },
       ],
-       headerProps: {
-        sortByText: "Ordernar por"
+      headerProps: {
+        sortByText: "Ordernar por",
       },
       q: false,
       items: [],
@@ -125,16 +128,11 @@ export default {
     },
   },
   mounted() {
-    this.list();
+    this.list()
   },
   methods: {
     list(q = false) {
-      var url = `${this.BASE_URL}/contacts`;
-      if (q) {
-        url += `?q=${this.search}`;
-      }
-      this.axios.get(url).then((response) => {
-        console.log(response);
+      this.axios.get(`${this.BASE_URL}/contacts`).then((response) => {
         this.items = response.data;
       });
     },
@@ -161,7 +159,7 @@ export default {
     },
     openDeleteDialog(contact_id) {
       this.dialogDelete = true;
-      this.selectedItem = { id: contact_id }
+      this.selectedItem = { id: contact_id };
     },
     closeShowDialog() {
       this.dialogShow = false;
@@ -175,29 +173,30 @@ export default {
       this.dialogDelete = false;
       this.selectedItem = {};
     },
-    updateContact(item){
+    updateContact(item) {
       this.items.forEach((el, index) => {
         if (el.id === item.id) {
-          this.items.splice(index, 1, item)
+          this.items.splice(index, 1, item);
         }
-      })
+      });
     },
-    addContact(item){
-      this.items.push(item)
+    addContact(item) {
+      this.items.push(item);
     },
     deleteContact(id) {
-       this.items.forEach((el, index) => {
+      this.items.forEach((el, index) => {
         if (el.id === id) {
-          this.items.splice(index, 1)
+          this.items.splice(index, 1);
         }
-      })
-    }
+      });
+    },
   },
 };
 </script>
 
 <style scoped>
-.container-table, .empty-table-container {
+.container-table,
+.empty-table-container {
   min-height: calc(100vh - 200px);
 }
 .container {
@@ -208,7 +207,13 @@ export default {
   border-radius: 8px;
 }
 
-.v-btn{
+.v-btn {
   text-transform: unset;
+}
+@media screen and (max-width: 992px) {
+  .container-table,
+  .empty-table-container {
+    min-width: calc(100vw - 40px);
+  }
 }
 </style>
